@@ -6,10 +6,12 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) {
+
         File projectDir = new File(System.getProperty("user.dir"));
+        System.out.print(projectDir + "\n");
         String[] listOfFiles = projectDir.list();
         int countOfTxtFiles = 0;
-        ArrayList<String> txtFiles = new ArrayList<String>();
+        ArrayList<String> txtFiles = new ArrayList<>();
         for (String currentFile : listOfFiles) {
             if (isTxt(currentFile)) {
                 countOfTxtFiles++;
@@ -38,7 +40,6 @@ public class Main {
     }
 
     private static boolean parse(String fileName) {
-        //System.out.print(fileName + "\n");
 
         String[] tags = {"#700:", "#200:"};
 
@@ -48,7 +49,7 @@ public class Main {
             BufferedReader inputFile = new BufferedReader(new InputStreamReader(fstream));
             BufferedWriter outputFile = new BufferedWriter(new FileWriter(changedfileName));
             String strLine;
-            ArrayList<String> buff = new ArrayList<String>();
+            ArrayList<String> buff = new ArrayList<>();
             while ((strLine = inputFile.readLine()) != null){
 
                 if (checkTags(tags, strLine)) {
@@ -83,7 +84,7 @@ public class Main {
     }
 
     private static ArrayList<String> sortByTag(String[] tags, ArrayList<String> str) {
-        ArrayList<String> buff = new ArrayList<String>();
+        ArrayList<String> buff = new ArrayList<>();
         boolean found = false;
         for (String tag : tags) {
             for (String element : str) {
@@ -122,8 +123,6 @@ public class Main {
                 newStr += str.charAt(i);
             }
         }
-        //newStr += str.charAt(str.length() - 1);
-        //System.out.print(newStr + "\n");
         return newStr.trim();
     }
 }
