@@ -127,13 +127,14 @@ public class Main extends JFrame {
         outerBox.add(box10);
         outerBox.add(Box.createVerticalStrut(separator));
 
-        helpButton.addActionListener(new ButtonEventListener());
+        helpButton.addActionListener(new HelpButtonEventListener());
+        processButton.addActionListener(new ProcessButtonEventListener());
 
         setContentPane(outerBox);
         setSize(500, 400);
     }
 
-    class ButtonEventListener implements ActionListener {
+    class HelpButtonEventListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String message = "";
             message += "Данный парсер обрабатывает все файлы .txt в указанном каталоге,\n";
@@ -155,38 +156,56 @@ public class Main extends JFrame {
         }
     }
 
+    class ProcessButtonEventListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            File projectDir = new File(System.getProperty("user.dir"));
+//            System.out.print(projectDir + "\n");
+            String message = "";
+            message += projectDir + "\n";
+            String[] listOfFiles = projectDir.list();
+            int countOfTxtFiles = 0;
+            ArrayList<String> txtFiles = new ArrayList<>();
+            for (String currentFile : listOfFiles) {
+                if (isTxt(currentFile)) {
+                    countOfTxtFiles++;
+                    txtFiles.add(currentFile);
+                }
+            }
+            if (countOfTxtFiles == 0) {
+//                System.out.print("No .txt files found!\n");
+                message += "No .txt files found!\n";
+            } else {
+//                System.out.print(countOfTxtFiles + " files found!\n");
+                message += countOfTxtFiles + " files found!\n";
+                for (String currentTxt : txtFiles) {
+//                    System.out.print("Start parsing " + currentTxt + "...\n");
+                    message += "Start parsing " + currentTxt + "...\n";
+                    Boolean result = parse(projectDir + "\\" + currentTxt);
+                    if (result) {
+//                        System.out.print(currentTxt + " parsed successfully!\n");
+                        message += currentTxt + " parsed successfully!\n";
+                    } else {
+//                        System.out.print("Parsing of " + currentTxt + " failed.\n");
+                        message += "Parsing of " + currentTxt + " failed.\n";
+                    }
+                }
+            }
+//            System.out.print("Work done!");
+            message += "Work done!";
+            JOptionPane.showMessageDialog(null,
+                    message,
+                    "Parse",
+                    JOptionPane.PLAIN_MESSAGE);
+        }
+    }
+
 
     public static void main(String[] args) {
 
         Main app = new Main();
         app.setVisible(true);
 
-        File projectDir = new File(System.getProperty("user.dir"));
-        System.out.print(projectDir + "\n");
-        String[] listOfFiles = projectDir.list();
-        int countOfTxtFiles = 0;
-        ArrayList<String> txtFiles = new ArrayList<>();
-        for (String currentFile : listOfFiles) {
-            if (isTxt(currentFile)) {
-                countOfTxtFiles++;
-                txtFiles.add(currentFile);
-            }
-        }
-        if (countOfTxtFiles == 0) {
-            System.out.print("No .txt files found!\n");
-        } else {
-            System.out.print(countOfTxtFiles + " files found!\n");
-            for (String currentTxt : txtFiles) {
-                System.out.print("Start parsing " + currentTxt + "...\n");
-                Boolean result = parse(projectDir + "\\" + currentTxt);
-                if (result) {
-                    System.out.print(currentTxt + " parsed successfully!\n");
-                } else {
-                    System.out.print("Parsing of " + currentTxt + " failed.\n");
-                }
-            }
-        }
-        System.out.print("Work done!");
     }
 
     private static boolean isTxt(String fileName) {
