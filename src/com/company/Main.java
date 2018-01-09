@@ -21,7 +21,7 @@ public class Main extends JFrame {
     private JLabel divideLabel = new JLabel("записей");
 
     private JLabel tagsLabel = new JLabel("Искомые тэги:");
-    private JTextField tagsField = new JTextField("#500, #400", 5);
+    private JTextField tagsField = new JTextField("#500 #400", 5);
 
     private static JLabel emptyTaglabel = new JLabel("Если тэг не встретился:");
     private static JTextField emptyTagField = new JTextField("Неизвестен", 5);
@@ -143,7 +143,7 @@ public class Main extends JFrame {
             message += "\"Директория с целевыми файлами:\" - папка, где будут лежать распарсенные файлы.\n";
             message += "\"Разделять файл каждые\" - если файл большой, можно разделять его по записям.\n";
             message += "\"Постфикс целевых файлов:\" - добавляет в конец к имени распарсенных файлов.\n";
-            message += "\"Искомые тэги\" - список выдираемых тэгов через запятую и пробел.\n";
+            message += "\"Искомые тэги\" - список выдираемых тэгов через пробел.\n";
             message += "\"Если тэг не встретился\" - что написать вместо не найденного тэга.\n";
             message += "\"Обертка элемента\" - во что оборачивать найденный элемент.\n";
             message += "\"Разделитель элементов\" - чем разделять элементы в строке.\n";
