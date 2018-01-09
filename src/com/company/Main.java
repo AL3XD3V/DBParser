@@ -2,7 +2,6 @@ package com.company;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
@@ -210,7 +209,6 @@ public class Main extends JFrame {
         String[] tags = {"#700:", "#200:"};
 
         String changedfileName = Main.destinationDirField.getText() + getFileName(fileName).substring(0, getFileName(fileName).length() - 4) + Main.filePostfixField.getText() + ".txt";
-        System.out.print(changedfileName + '\n');
         try {
             FileInputStream fstream = new FileInputStream(fileName);
             BufferedReader inputFile = new BufferedReader(new InputStreamReader(fstream));
