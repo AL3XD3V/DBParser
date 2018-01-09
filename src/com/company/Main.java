@@ -127,8 +127,21 @@ public class Main extends JFrame {
         outerBox.add(box10);
         outerBox.add(Box.createVerticalStrut(separator));
 
+        helpButton.addActionListener(new ButtonEventListener());
+
         setContentPane(outerBox);
         setSize(500, 400);
+    }
+
+    class ButtonEventListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            String message = "";
+            message += "This is Help!\n";
+            JOptionPane.showMessageDialog(null,
+                    message,
+                    "Help",
+                    JOptionPane.PLAIN_MESSAGE);
+        }
     }
 
 
