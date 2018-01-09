@@ -200,11 +200,11 @@ public class Main extends JFrame {
 
         ArrayList<String> tags = parseTags(Main.tagsField.getText());
 
-        String changedfileName = Main.destinationDirField.getText() + getFileName(fileName).substring(0, getFileName(fileName).length() - 4) + Main.filePostfixField.getText() + ".txt";
+        String changedFileName = Main.destinationDirField.getText() + getFileName(fileName).substring(0, getFileName(fileName).length() - 4) + Main.filePostfixField.getText() + ".txt";
         try {
-            FileInputStream fstream = new FileInputStream(fileName);
-            BufferedReader inputFile = new BufferedReader(new InputStreamReader(fstream));
-            BufferedWriter outputFile = new BufferedWriter(new FileWriter(changedfileName));
+            FileInputStream fStream = new FileInputStream(fileName);
+            BufferedReader inputFile = new BufferedReader(new InputStreamReader(fStream));
+            BufferedWriter outputFile = new BufferedWriter(new FileWriter(changedFileName));
             String strLine;
             ArrayList<String> buff = new ArrayList<>();
             while ((strLine = inputFile.readLine()) != null){
@@ -224,6 +224,8 @@ public class Main extends JFrame {
                     buff.clear();
                 }
             }
+            inputFile.close();
+            outputFile.close();
             return true;
         } catch (IOException e) {
             System.out.println("Error reading file...\n");
