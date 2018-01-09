@@ -8,14 +8,14 @@ import javax.swing.*;
 
 public class Main extends JFrame {
 
-    private JLabel sourceDirLabel = new JLabel("Директория с исходными файлами:");
-    private JTextField sourceDirField = new JTextField(System.getProperty("user.dir"), 5);
+    private static JLabel sourceDirLabel = new JLabel("Директория с исходными файлами:");
+    private static JTextField sourceDirField = new JTextField(System.getProperty("user.dir"), 5);
 
-    private JLabel destinationDirLabel = new JLabel("Директория с целевыми файлами:");
-    private JTextField destinationDirField = new JTextField(System.getProperty("user.dir") + "\\parsed\\", 5);
+    private static JLabel destinationDirLabel = new JLabel("Директория с целевыми файлами:");
+    private static JTextField destinationDirField = new JTextField(System.getProperty("user.dir") + "\\parsed\\", 5);
 
-    private JLabel filePostfixLabel = new JLabel("Постфикс целевых файлов:");
-    private JTextField filePostfixField = new JTextField("_parsed", 5);
+    private static JLabel filePostfixLabel = new JLabel("Постфикс целевых файлов:");
+    private static JTextField filePostfixField = new JTextField("_parsed", 5);
 
     private JCheckBox divideBox = new JCheckBox("Разделять файл каждые", false);
     private JTextField divideField = new JTextField("0", 5);
@@ -24,20 +24,20 @@ public class Main extends JFrame {
     private JLabel tagsLabel = new JLabel("Искомые тэги:");
     private JTextField tagsField = new JTextField("#500, #400", 5);
 
-    private JLabel emptyTaglabel = new JLabel("Если тэг не встретился:");
-    private JTextField emptyTagField = new JTextField("Неизвестен", 5);
+    private static JLabel emptyTaglabel = new JLabel("Если тэг не встретился:");
+    private static JTextField emptyTagField = new JTextField("Неизвестен", 5);
 
-    private JLabel textWrapperLabel = new JLabel("Обертка элемента:");
-    private JTextField textWrapperField = new JTextField("\"", 5);
+    private static JLabel textWrapperLabel = new JLabel("Обертка элемента:");
+    private static JTextField textWrapperField = new JTextField("\"", 5);
 
-    private JLabel elementDivisorLabel = new JLabel("Разделитель элементов:");
-    private JTextField elementDivisorField = new JTextField(",", 5);
+    private static JLabel elementDivisorLabel = new JLabel("Разделитель элементов:");
+    private static JTextField elementDivisorField = new JTextField(",", 5);
 
-    private JLabel lineDivisorLabel = new JLabel("Разделитель строки:");
-    private JTextField lineDivisorField = new JTextField(";", 5);
+    private static JLabel lineDivisorLabel = new JLabel("Разделитель строки:");
+    private static JTextField lineDivisorField = new JTextField(";", 5);
 
-    private JButton processButton = new JButton("Парсинг");
-    private JButton helpButton = new JButton("Помощь");
+    private static JButton processButton = new JButton("Парсинг");
+    private static JButton helpButton = new JButton("Помощь");
 
     public Main() {
         super("Irbis64 DBParser");
@@ -159,8 +159,7 @@ public class Main extends JFrame {
     class ProcessButtonEventListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            File projectDir = new File(System.getProperty("user.dir"));
-//            System.out.print(projectDir + "\n");
+            File projectDir = new File(Main.sourceDirField.getText());
             String message = "";
             message += projectDir + "\n";
             String[] listOfFiles = projectDir.list();
@@ -173,25 +172,19 @@ public class Main extends JFrame {
                 }
             }
             if (countOfTxtFiles == 0) {
-//                System.out.print("No .txt files found!\n");
                 message += "No .txt files found!\n";
             } else {
-//                System.out.print(countOfTxtFiles + " files found!\n");
                 message += countOfTxtFiles + " files found!\n";
                 for (String currentTxt : txtFiles) {
-//                    System.out.print("Start parsing " + currentTxt + "...\n");
                     message += "Start parsing " + currentTxt + "...\n";
                     Boolean result = parse(projectDir + "\\" + currentTxt);
                     if (result) {
-//                        System.out.print(currentTxt + " parsed successfully!\n");
                         message += currentTxt + " parsed successfully!\n";
                     } else {
-//                        System.out.print("Parsing of " + currentTxt + " failed.\n");
                         message += "Parsing of " + currentTxt + " failed.\n";
                     }
                 }
             }
-//            System.out.print("Work done!");
             message += "Work done!";
             JOptionPane.showMessageDialog(null,
                     message,
@@ -216,7 +209,8 @@ public class Main extends JFrame {
 
         String[] tags = {"#700:", "#200:"};
 
-        String changedfileName = fileName.substring(0, fileName.length() - 4) + "_parsed.txt";
+        String changedfileName = Main.destinationDirField.getText() + getFileName(fileName).substring(0, getFileName(fileName).length() - 4) + Main.filePostfixField.getText() + ".txt";
+        System.out.print(changedfileName + '\n');
         try {
             FileInputStream fstream = new FileInputStream(fileName);
             BufferedReader inputFile = new BufferedReader(new InputStreamReader(fstream));
@@ -232,10 +226,10 @@ public class Main extends JFrame {
                     buff = sortByTag(tags, buff);
                     String resultBuff = "";
                     for (String str : buff) {
-                        String local = "\"" + clearSpecials(clearTag(tags, str)) + "\"";
-                        resultBuff += local + ",";
+                        String local = Main.textWrapperField.getText() + clearSpecials(clearTag(tags, str)) + Main.textWrapperField.getText();
+                        resultBuff += local + Main.elementDivisorField.getText();
                     }
-                    outputFile.write(resultBuff.substring(0, resultBuff.length() - 1) + ";\r\n");
+                    outputFile.write(resultBuff.substring(0, resultBuff.length() - 1) + Main.lineDivisorField.getText());
                     outputFile.flush();
                     buff.clear();
                 }
@@ -245,6 +239,18 @@ public class Main extends JFrame {
             System.out.println("Error reading file...\n");
         }
         return false;
+    }
+
+    private static String getFileName(String fileName) {
+        String name = "";
+        for (int i = fileName.length() - 1; i > 1; i--) {
+            if (fileName.charAt(i) == '\\') {
+                break;
+            } else {
+                name = fileName.charAt(i) + name;
+            }
+        }
+        return name;
     }
 
     private static boolean checkTags(String[] tags, String str) {
@@ -267,7 +273,7 @@ public class Main extends JFrame {
                 }
             }
             if (!found) {
-                buff.add("Неизвестен");
+                buff.add(Main.emptyTagField.getText());
             }
             found = false;
         }
