@@ -20,8 +20,8 @@ public class Main extends JFrame {
     private JTextField divideField = new JTextField("0", 5);
     private JLabel divideLabel = new JLabel("записей");
 
-    private JLabel tagsLabel = new JLabel("Искомые тэги:");
-    private JTextField tagsField = new JTextField("#500 #400", 5);
+    private static JLabel tagsLabel = new JLabel("Искомые тэги:");
+    private static JTextField tagsField = new JTextField("#500 #400", 5);
 
     private static JLabel emptyTaglabel = new JLabel("Если тэг не встретился:");
     private static JTextField emptyTagField = new JTextField("Неизвестен", 5);
@@ -192,21 +192,13 @@ public class Main extends JFrame {
         }
     }
 
-
-    public static void main(String[] args) {
-
-        Main app = new Main();
-        app.setVisible(true);
-
-    }
-
     private static boolean isTxt(String fileName) {
         return fileName.contains(".txt");
     }
 
     private static boolean parse(String fileName) {
 
-        String[] tags = {"#700:", "#200:"};
+        ArrayList<String> tags = parseTags(Main.tagsField.getText());
 
         String changedfileName = Main.destinationDirField.getText() + getFileName(fileName).substring(0, getFileName(fileName).length() - 4) + Main.filePostfixField.getText() + ".txt";
         try {
@@ -251,7 +243,7 @@ public class Main extends JFrame {
         return name;
     }
 
-    private static boolean checkTags(String[] tags, String str) {
+    private static boolean checkTags(ArrayList<String> tags, String str) {
         for (String tag : tags) {
             if (str.contains(tag)) {
                 return true;
@@ -260,7 +252,24 @@ public class Main extends JFrame {
         return false;
     }
 
-    private static ArrayList<String> sortByTag(String[] tags, ArrayList<String> str) {
+    private static ArrayList<String> parseTags(String tags) {
+        ArrayList<String> tagsArray = new ArrayList<>();
+        String currentTag = "";
+        for (int i = 0; i < tags.length(); i++) {
+            if (tags.charAt(i) != ' ') {
+                currentTag += tags.charAt(i);
+            } else {
+                tagsArray.add(currentTag);
+                currentTag = "";
+                continue;
+            }
+        }
+        tagsArray.add(currentTag);
+
+        return tagsArray;
+    }
+
+    private static ArrayList<String> sortByTag(ArrayList<String> tags, ArrayList<String> str) {
         ArrayList<String> buff = new ArrayList<>();
         boolean found = false;
         for (String tag : tags) {
@@ -278,7 +287,7 @@ public class Main extends JFrame {
         return buff;
     }
 
-    private static String clearTag(String[] tags, String str) {
+    private static String clearTag(ArrayList<String> tags, String str) {
         for (String tag : tags) {
             if (str.contains(tag)) {
                 return str.substring(6);
@@ -302,4 +311,12 @@ public class Main extends JFrame {
         }
         return newStr.trim();
     }
+
+    public static void main(String[] args) {
+
+        Main app = new Main();
+        app.setVisible(true);
+
+    }
+
 }
