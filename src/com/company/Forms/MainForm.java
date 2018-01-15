@@ -16,12 +16,12 @@ public class MainForm extends JFrame {
     private static JLabel filePostfixLabel = new JLabel("Постфикс целевых файлов:");
     public static JTextField filePostfixField = new JTextField("_parsed", 5);
 
-    private JCheckBox divideBox = new JCheckBox("Разделять файл каждые", false);
-    private JTextField divideField = new JTextField("0", 5);
-    private JLabel divideLabel = new JLabel("записей");
+    public static JCheckBox divideBox = new JCheckBox("Разделять файл каждые", false);
+    public static JTextField divideField = new JTextField("0", 5);
+    private static JLabel divideLabel = new JLabel("записей");
 
     private static JLabel tagsLabel = new JLabel("Искомые тэги:");
-    public static JTextField tagsField = new JTextField("#500 #400", 5);
+    public static JTextField tagsField = new JTextField("#700 #200", 5);
 
     private static JLabel emptyTagLabel = new JLabel("Если тэг не встретился:");
     public static JTextField emptyTagField = new JTextField("Неизвестен", 5);
@@ -35,13 +35,13 @@ public class MainForm extends JFrame {
     private static JLabel lineDivisorLabel = new JLabel("Разделитель строки:");
     public static JTextField lineDivisorField = new JTextField(";", 5);
 
-    public static JButton processButton = new JButton("Парсинг");
-    public static JButton helpButton = new JButton("Помощь");
+    private static JButton processButton = new JButton("Парсинг");
+    private static JButton helpButton = new JButton("Помощь");
 
     public MainForm() {
         super("Irbis64 DBParser");
         this.setBounds(400,400, 500, 400);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         int separator = 10;
 
         Box outerBox = Box.createVerticalBox();

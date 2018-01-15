@@ -1,33 +1,51 @@
 package com.company.Logic;
 
 import com.company.Forms.MainForm;
-
 import java.io.*;
 import java.util.ArrayList;
 
 public class Parser {
 
-    public static boolean parse(String fileName) {
+    public static boolean parse() {
+        ArrayList<String> files = Helper.files();
+        Boolean flag = true;
+        if (!MainForm.divideBox.isSelected()) {
+            for (String file : files) {
+                if (!parseOnes(Helper.getSourceDir() + "\\" + file)) {
+                    flag = false;
+                }
+            }
+        } else {
+            for (String file : files) {
+                if (!parseMany(Helper.getSourceDir() + "\\" + file)) {
+                    flag = false;
+                }
+            }
+        }
+        return flag;
+    }
 
-        ArrayList<String> tags = Helper.parseTags(MainForm.tagsField.getText());
+    private static boolean parseOnes(String fileName) {
 
-        String changedFileName = MainForm.destinationDirField.getText() + Helper.getFileName(fileName).substring(0, Helper.getFileName(fileName).length() - 4) + MainForm.filePostfixField.getText() + ".txt";
+        System.out.print(fileName + "\n");
+        System.out.print(Helper.newFileName(fileName) + "\n");
+        System.out.print(Helper.tags());
+
         try {
-            FileInputStream fStream = new FileInputStream(fileName);
-            BufferedReader inputFile = new BufferedReader(new InputStreamReader(fStream));
-            BufferedWriter outputFile = new BufferedWriter(new FileWriter(changedFileName));
+            BufferedReader inputFile = Helper.openReadStream(fileName);
+            BufferedWriter outputFile = Helper.openWriteStream(Helper.newFileName(fileName));
             String strLine;
             ArrayList<String> buff = new ArrayList<>();
             while ((strLine = inputFile.readLine()) != null){
 
-                if (Helper.checkTags(tags, strLine)) {
+                if (Helper.checkTags(Helper.tags(), strLine)) {
                     buff.add(strLine);
                 }
                 if (strLine.contains("***") && !buff.isEmpty()) {
-                    buff = Helper.sortByTag(tags, buff);
+                    buff = Helper.sortByTag(Helper.tags(), buff);
                     String resultBuff = "";
                     for (String str : buff) {
-                        String local = MainForm.textWrapperField.getText() + Helper.clearSpecials(Helper.clearTag(tags, str)) + MainForm.textWrapperField.getText();
+                        String local = MainForm.textWrapperField.getText() + Helper.clearSpecials(Helper.clearTag(Helper.tags(), str)) + MainForm.textWrapperField.getText();
                         resultBuff += local + MainForm.elementDivisorField.getText();
                     }
                     outputFile.write(resultBuff.substring(0, resultBuff.length() - 1) + MainForm.lineDivisorField.getText());
@@ -43,5 +61,11 @@ public class Parser {
         }
         return false;
     }
+
+    private static boolean parseMany(String fileName) {
+        return false;
+    }
+
+
 
 }

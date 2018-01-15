@@ -2,6 +2,7 @@ package com.company.Logic;
 
 import com.company.Forms.MainForm;
 
+import java.io.*;
 import java.util.ArrayList;
 
 public class Helper {
@@ -89,6 +90,50 @@ public class Helper {
             }
         }
         return newStr.trim();
+    }
+
+    public static File getSourceDir() {
+        return new File(MainForm.sourceDirField.getText());
+    }
+
+    public static String getDestinationDir() {
+        return MainForm.destinationDirField.getText();
+    }
+
+    public static String getFilePostfix() {
+        return MainForm.filePostfixField.getText();
+    }
+
+    public static String[] getListOfFiles() {
+        return getSourceDir().list();
+    }
+
+    public static ArrayList<String> files() {
+        ArrayList<String> txtFiles = new ArrayList<>();
+        String[] listOfFiles = getListOfFiles();
+        for (String currentFile : listOfFiles) {
+            if (Helper.isTxt(currentFile)) {
+                txtFiles.add(currentFile);
+            }
+        }
+        return txtFiles;
+    }
+
+    public static ArrayList<String> tags() {
+        return Helper.parseTags(MainForm.tagsField.getText());
+    }
+
+    public static BufferedReader openReadStream(String fileName) throws FileNotFoundException {
+        FileInputStream fStream = new FileInputStream(fileName);
+        return new BufferedReader(new InputStreamReader(fStream));
+    }
+
+    public static BufferedWriter openWriteStream(String fileName) throws IOException {
+        return new BufferedWriter(new FileWriter(fileName));
+    }
+
+    public static String newFileName(String fileName) {
+        return getDestinationDir() + getFileName(fileName).substring(0, getFileName(fileName).length() - 4) + getFilePostfix() + ".txt";
     }
 
 }
