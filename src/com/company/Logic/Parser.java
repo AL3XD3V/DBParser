@@ -3,6 +3,7 @@ package com.company.Logic;
 import com.company.Forms.MainForm;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Parser {
 
@@ -61,6 +62,13 @@ public class Parser {
         return false;
     }
 
+    private static String readLine(Scanner sc) {
+        if (sc.hasNextLine()) {
+            return sc.nextLine();
+        } else {
+            return null;
+        }
+    }
 
 
 }
