@@ -26,11 +26,6 @@ public class Parser {
     }
 
     private static boolean parseOnes(String fileName) {
-
-        System.out.print(fileName + "\n");
-        System.out.print(Helper.newFileName(fileName) + "\n");
-        System.out.print(Helper.tags());
-
         try {
             BufferedReader inputFile = Helper.openReadStream(fileName);
             BufferedWriter outputFile = Helper.openWriteStream(Helper.newFileName(fileName));
