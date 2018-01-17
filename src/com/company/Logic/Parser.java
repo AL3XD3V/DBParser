@@ -59,16 +59,58 @@ public class Parser {
     }
 
     private static boolean parseMany(String fileName) {
+        try {
+            BufferedReader inputFile = Helper.openReadStream(fileName);
+            String strLine;
+            ArrayList<String> buff = new ArrayList<>();
+            int countOfLines = 0;
+            int countOfFiles = 1;
+            String toWrite = "";
+            while ((strLine = inputFile.readLine()) != null){
+
+                System.out.print(countOfFiles + "  " + countOfLines + "\n");
+
+                if (Helper.checkTags(Helper.tags(), strLine)) {
+                    buff.add(strLine);
+                    countOfLines++;
+                }
+                if (countOfLines ==  Integer.parseInt(MainForm.divideField.getText())) {
+                    countOfLines = 0;
+                    File file = new File(Helper.newFilePartName(fileName, Integer.toString(countOfFiles)));
+                    writeToFile(file, toWrite);
+                    countOfFiles++;
+                    toWrite = "";
+                }
+                if (strLine.contains("***") && !buff.isEmpty()) {
+                    buff = Helper.sortByTag(Helper.tags(), buff);
+                    String resultBuff = "";
+                    for (String str : buff) {
+                        String local = MainForm.textWrapperField.getText() + Helper.clearSpecials(Helper.clearTag(Helper.tags(), str)) + MainForm.textWrapperField.getText();
+                        resultBuff += local + MainForm.elementDivisorField.getText();
+                    }
+                    resultBuff = resultBuff.substring(0, resultBuff.length() - 1) + MainForm.lineDivisorField.getText();
+                    toWrite += resultBuff;
+                    buff.clear();
+                }
+            }
+            inputFile.close();
+            if (!toWrite.isEmpty()) {
+                File file = new File(Helper.newFilePartName(fileName, Integer.toString(countOfFiles)));
+                writeToFile(file, toWrite);
+            }
+            return true;
+        } catch (IOException e) {
+            System.out.println("Error reading file...\n");
+        }
         return false;
     }
 
-    private static String readLine(Scanner sc) {
-        if (sc.hasNextLine()) {
-            return sc.nextLine();
-        } else {
-            return null;
-        }
-    }
+    public static boolean writeToFile(File file, String str) throws IOException {
 
+        FileWriter wr = new FileWriter(file);
+        wr.append(str);
+        wr.close();
+        return true;
+    }
 
 }

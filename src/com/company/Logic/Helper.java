@@ -136,4 +136,7 @@ public class Helper {
         return getDestinationDir() + getFileName(fileName).substring(0, getFileName(fileName).length() - 4) + getFilePostfix() + ".txt";
     }
 
+    public static String newFilePartName(String fileName, String part) {
+        return getDestinationDir() + getFileName(fileName).substring(0, getFileName(fileName).length() - 4) + getFilePostfix() + "_" + part + ".txt";
+    }
 }
